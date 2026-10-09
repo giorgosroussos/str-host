@@ -4,7 +4,7 @@ Updated: 2026-10-09 · Milestone: Phase 0 · Parallel limit: 3 · Mode: design-p
 
 | ID | Title | Wave | Status | Depends on | Lane | Prompt 2 | Agent | Rounds |
 |---|---|---|---|---|---|---|---|---|
-| FND-01 | Command contract and repository scaffold | 1 | ready | — | infra | yes | - | 0 |
+| FND-01 | Command contract and repository scaffold | 1 | integrating | — | infra | yes | - | 0 |
 | FND-02 | CI baseline | 2 | todo | FND-01 | infra | yes | - | 0 |
 | FND-03 | Design, accessibility and localization foundation | 3 | todo | FND-01, FND-02 | staff-ui | yes | - | 0 |
 | ACC-01 | Tenancy and isolation harness | 4 | todo | Phase 0 exit | domain:account | yes | - | 0 |
