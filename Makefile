@@ -1,18 +1,19 @@
 # STR Host root command contract (AGENTS.md "Commands").
 #
 # `check-docs`, `check-locks`, `verify-chain`, the two `rebuild-*` targets,
-# `install-hooks` and `unlock` are real from the first commit. Every other target is delivered by
-# the work package named in its recipe and, until then, fails with that message
-# instead of passing: a missing gate and a passing gate must never look alike.
-# FND-01 replaces the placeholder bodies with the real commands; the target list
-# itself is the contract and does not change without a DECISIONS.md entry.
+# `install-hooks` and `unlock` are real from the first commit; FND-01 made every
+# other target real. Helpers live in scripts/. The target list itself is the
+# contract and does not change without a DECISIONS.md entry (D-001).
+#
+# Prerequisites: PHP 8.3, Composer, Node (version in .nvmrc and package.json
+# "engines"), Docker with the Compose plugin, Python 3. `make test`,
+# `make test-browser`, `make migrate` and `make dev` need `make infra-up` first.
 
 SHELL := /bin/bash
 .DEFAULT_GOAL := help
 
-define not_yet
-	@echo "make $(1): not implemented yet. Delivered by work package $(2); see PLAN.md and specs/15-implementation-plan.md §3." >&2; exit 1
-endef
+PHP_TEST_SUITES := Unit,Feature,Isolation
+PRETTIER_PATHS := resources/js resources/css vite.config.ts eslint.config.js tsconfig.json .prettierrc.json
 
 .PHONY: help setup infra-up infra-status infra-down migrate dev test test-browser lint format format-check typecheck build verify smoke audit scan-secrets check-docs check-locks verify-chain rebuild-decisions rebuild-questions install-hooks unlock clean-start
 
@@ -20,54 +21,72 @@ help: ## List targets
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  %-16s %s\n", $$1, $$2}'
 
 setup: ## Install dependencies from lockfiles, copy env examples
-	$(call not_yet,setup,FND-01)
+	scripts/toolchain.sh --with-docker
+	composer install --no-interaction --prefer-dist --no-progress
+	npm ci --no-audit --no-fund
+	@if [ ! -f .env ]; then cp .env.example .env && echo "setup: created .env from .env.example"; fi
+	@if ! grep -qE '^APP_KEY=.+' .env; then php artisan key:generate --ansi; fi
+	npx playwright install chromium
 
 infra-up: ## Start local infrastructure and wait for health
-	$(call not_yet,infra-up,FND-01)
+	docker compose up --detach --wait
 
 infra-status: ## Show infrastructure status
-	$(call not_yet,infra-status,FND-01)
+	docker compose ps --all
 
 infra-down: ## Stop local infrastructure (data kept)
-	$(call not_yet,infra-down,FND-01)
+	docker compose down
 
 migrate: ## Apply database migrations locally
-	$(call not_yet,migrate,FND-01)
+	php artisan migrate --no-interaction
 
 dev: ## Run every application process for local development
-	$(call not_yet,dev,FND-01)
+	scripts/toolchain.sh
+	scripts/dev.sh
 
 test: ## All automated tests against the real database engine
-	$(call not_yet,test,FND-01)
+	php artisan config:clear --no-interaction >/dev/null
+	php vendor/bin/pest --testsuite=$(PHP_TEST_SUITES)
 
 test-browser: ## Browser tests of the critical journeys, with accessibility checks
-	$(call not_yet,test-browser,FND-01)
+	scripts/toolchain.sh
+	npm run build
+	php vendor/bin/pest --testsuite=Browser
 
 lint: ## Linters
-	$(call not_yet,lint,FND-01)
+	scripts/toolchain.sh
+	php vendor/bin/phpstan analyse --no-progress --memory-limit=1G
+	npx eslint .
 
 format: ## Apply formatting
-	$(call not_yet,format,FND-01)
+	scripts/toolchain.sh
+	php vendor/bin/pint
+	npx prettier --write $(PRETTIER_PATHS)
 
 format-check: ## Verify formatting without changing files
-	$(call not_yet,format-check,FND-01)
+	scripts/toolchain.sh
+	php vendor/bin/pint --test
+	npx prettier --check $(PRETTIER_PATHS)
 
 typecheck: ## Static analysis and type checks
-	$(call not_yet,typecheck,FND-01)
+	scripts/toolchain.sh
+	npx vue-tsc --noEmit
 
 build: ## Production builds
-	$(call not_yet,build,FND-01)
+	scripts/toolchain.sh
+	npm run build
 
 verify: lint format-check typecheck test test-browser build check-docs ## All quality gates
 
 smoke: ## Health of the running system through its public entry points
-	$(call not_yet,smoke,FND-01)
+	scripts/smoke.sh
 
 audit: ## Dependency advisories
-	$(call not_yet,audit,FND-01)
+	composer audit --locked --no-interaction
+	npm audit
 
 scan-secrets: ## Secret scan of everything Git tracks
-	$(call not_yet,scan-secrets,FND-01)
+	scripts/scan-secrets.sh
 
 verify-chain: ## Recompute every hash and link in the event log
 	python3 scripts/verify-chain.py
@@ -100,4 +119,4 @@ unlock: ## Ceremonial unlock of one hard-locked path: make unlock PATH=<path> RE
 	 sh scripts/unlock.sh "$$target" "$(REASON)"
 
 clean-start: ## Fresh isolated environment: setup, infra-up, migrate, verify, smoke, teardown
-	$(call not_yet,clean-start,FND-01)
+	scripts/clean-start.sh

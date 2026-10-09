@@ -62,8 +62,10 @@ Never: `specs/**`, `docs/inputs/**`, `.doc-locks`, `.githooks/**`, `scripts/lock
 
 ## Log
 
-
 - 2026-10-09: worker dispatched (opus, worktree isolation), branch impl/FND-01 off impl/wave-1.
+- 2026-10-09 worker: branch impl/FND-01 from origin/impl/wave-1, relocked, hooks active. Read AGENTS/PLAN/GAPS/TRACEABILITY, D-001/006/009/026/036/037/041, specs 02, 03 §1, 11 §1, 12, 15 §3. Host node is v12 (nvm has 22/24): pinning Node 22 via .nvmrc and a toolchain check.
+- 2026-10-09 worker: scaffold in place (Laravel 13.35, Fortify inert, Inertia 3 + Vue 3 TS, Tailwind 4, PrimeVue 4.5, Pest 4 + browser, Larastan L6). Every Makefile placeholder replaced; make verify green locally; make smoke green against make dev. Choices in .impl/inbox/FND-01.md. Next: commit, then make clean-start from the commit.
+- 2026-10-09 worker: make clean-start exit 0 from the commit (fresh clone, own Compose project on free ports: setup, infra-up, migrate, verify [12+2 tests, check-docs 0 failures], dev, smoke), teardown left no container, volume, process or temp dir. infra-down keeps data (migrate after re-up: nothing to migrate). Done; LANDING in the worker report.
 - 2026-10-09: worker reported done at fd0eaca (worktree .claude/worktrees/agent-a3198ea01ae0f42eb). Opened card Q-NEW-1 (UUID keys on framework tables, blocks ACC-02). LANDING block requested to .impl/landing/FND-01.md.
 - 2026-10-09: owner answered Q-NEW-1 = B. Worker asked to add card-answered/card-resolved events and the `03` §1 spec amendment to the LANDING file.
 - 2026-10-09: LANDING updated at 9b8e124. The UUID rule is a locked register bullet and an AGENTS.md red line, so the exemption is an ADR (D-NEW-5), which needs the owner's adr-approval-changed event. It edits both `03` §1 and `14` §1. Owner unlock is needed for both files.
@@ -136,6 +138,7 @@ Endpoint probe against `make dev`: `/` 200 and `/up` 200. These all return 404: 
 
 **Critical / high findings: none.**
 - 2026-10-09: verifier round 1 PASS with 2 medium notes (bootstrap/cache tracked, dev mail not a mail trap per `11` §1). Worker resumed to fix both before integration.
+- 2026-10-09 worker: verification round 1 fixes: Mailpit mail trap (compose, .env.example, smoke round trip, clean-start ports), bootstrap/cache ignored and generated files untracked, real third-party asset tests. make verify exit 0 (13+2 tests); make dev + smoke passed incl. mail trap; make clean-start exit 0 on 71bff28; landing block updated and dry-run green.
 - 2026-10-09: worker fixes at 71bff28 (bootstrap/cache ignored, Mailpit mail trap, stronger asset tests), landing updated at c777e10. Verifier round 2 started.
 
 ## Verification (round 2)
