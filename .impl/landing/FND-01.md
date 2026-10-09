@@ -1,6 +1,6 @@
 # FND-01 landing block
 
-Worker branch `impl/FND-01`, code commit `fd0eaca4c87b90f20a2793be6d563e6cca487ac6`. Apply on top of the merged branch: event log first, then the projections, then the living documents. Placeholder IDs: replace `D-NEW-1`…`D-NEW-5` with the next free D-numbers and `Q-NEW-1` with the next free Q-number, consistently everywhere below, including G-002 and the spec texts in §5. On the 2026-10-09 log these are D-042…D-046 and Q-098.
+Worker branch `impl/FND-01`, code commits `fd0eaca` (scaffold) and `71bff28` (verification round 1 fixes: mail trap, bootstrap cache, asset tests). Apply on top of the merged branch: event log first, then the projections, then the living documents. Placeholder IDs: replace `D-NEW-1`…`D-NEW-5` with the next free D-numbers and `Q-NEW-1` with the next free Q-number, consistently everywhere below, including G-002 and the spec texts in §5. On the 2026-10-09 log these are D-042…D-046 and Q-098.
 
 Dry run: the whole sequence below was applied with those real IDs to a scratch copy of this branch: events, both rebuilds and the two spec edits of §5. `log-append` accepted every event (seq 335–343). `python3 scripts/check-docs.py` then reported `summary: 0 failure(s)`, with Q-098 Resolved, D-046 rendered as `Type: adr` and the chain intact.
 
@@ -37,11 +37,11 @@ python3 scripts/log-append.py --type decision-added \
 ```bash
 python3 scripts/log-append.py --type decision-added \
   --set id=D-NEW-3 --set date=2026-10-09 \
-  --set title="Local runtime and the clean-start proof" \
+  --set title="Local runtime, mail trap and the clean-start proof" \
   --set type=implementation \
-  --set decision="docker-compose.yml runs postgres:16-alpine on 127.0.0.1:\${DB_PORT:-54316} under a Compose project named after the directory; ports and credentials come from the shell, then .env. Node 22 is pinned in .nvmrc and package.json engines and checked by scripts/toolchain.sh. make dev runs artisan serve, the Vite dev server and schedule:work through concurrently. make clean-start clones the committed HEAD into a temporary directory and runs setup, infra-up, migrate, verify, dev and smoke under a unique Compose project on free ports, then removes the volume and the clone." \
-  --set why="Several clones or worktrees can run side by side; a clean-start that reuses the developer's database or ports would not prove a fresh clone (\`15\` §3, \`11\` §1)." \
-  --set alternatives="Fixed port 5432 (rejected: commonly taken); php artisan dev (rejected: less explicit process list); clean-start in place with down --volumes (rejected: destroys the developer's data and tests uncommitted state)." \
+  --set decision="docker-compose.yml runs postgres:16-alpine on 127.0.0.1:\${DB_PORT:-54316} under a Compose project named after the directory, together with the development mail trap Mailpit (axllent/mailpit v1.31.1, digest-pinned; SMTP on 127.0.0.1:\${MAIL_PORT:-51025}, inbox and API on 127.0.0.1:\${MAILPIT_UI_PORT:-58025}) that .env.example sends all development mail to; make smoke proves locally that a message sent by the application lands in it. Ports and credentials come from the shell, then .env. Node 22 is pinned in .nvmrc and package.json engines and checked by scripts/toolchain.sh. make dev runs artisan serve, the Vite dev server and schedule:work through concurrently. make clean-start clones the committed HEAD into a temporary directory and runs setup, infra-up, migrate, verify, dev and smoke under a unique Compose project on free ports, then removes the volumes and the clone." \
+  --set why="Several clones or worktrees can run side by side; a clean-start that reuses the developer's database or ports would not prove a fresh clone (\`15\` §3). Development mail must go to a mail trap and never to real recipients (\`11\` §1); a local trap needs no account, credentials or third party." \
+  --set alternatives="Fixed port 5432 (rejected: commonly taken); php artisan dev (rejected: less explicit process list); clean-start in place with down --volumes (rejected: destroys the developer's data and tests uncommitted state); the log mailer (rejected: not a mail trap); a hosted sandbox account such as Mailtrap.io (rejected: a third party receives development mail and credentials are needed; still configurable through the SMTP variables); MailHog (rejected: unmaintained)." \
   --set affected_specs="\`11\` §1, \`15\` §3."
 ```
 
@@ -110,6 +110,8 @@ python3 scripts/log-append.py --type decision-added \
 
 ### Event 8: owner approves D-NEW-5 (adr-approval-changed)
 
+The owner explicitly approved ADR D-NEW-5 in session on 2026-10-09 (relayed by the coordinator), so this event is the owner's own, `--actor owner`.
+
 ```bash
 python3 scripts/log-append.py --actor owner --type adr-approval-changed \
   --set id=D-NEW-5 --set approval=granted --set approval_date=2026-10-09
@@ -136,12 +138,12 @@ make rebuild-decisions && make rebuild-questions
 FND-01 row (replaces the current `not started` row):
 
 ```
-| FND-01 | 0 | Command contract and repository scaffold | `02` §1–§2, `12` §1–§2 | done | 2026-10-09, impl/FND-01 fd0eaca: `make clean-start` exit 0 (fresh clone → setup, infra-up, migrate, verify, dev, smoke, teardown); `make verify` exit 0 (lint, format-check, typecheck, test 12 passed incl. tests/Feature/DatabaseEngineTest [pgsql 16], test-browser 2 passed with axe, build, check-docs 0 failures); `make smoke` passed against `make dev`; `make audit` 0 advisories; `make scan-secrets` no leaks; `make help` no "not implemented" |
+| FND-01 | 0 | Command contract and repository scaffold | `02` §1–§2, `12` §1–§2 | done | 2026-10-09, impl/FND-01 71bff28: `make clean-start` exit 0 (fresh clone → setup, infra-up [PostgreSQL 16 + Mailpit mail trap], migrate, verify, dev, smoke, teardown); `make verify` exit 0 (lint, format-check, typecheck, test 13 passed incl. tests/Feature/DatabaseEngineTest [pgsql 16] and tests/Feature/HomePageTest [no third-party host], test-browser 2 passed with axe, build, check-docs 0 failures); `make smoke` passed against `make dev`, including a mail sent by the application landing in the mail trap (`11` §1); `make audit` 0 advisories; `make scan-secrets` no leaks; `make help` no "not implemented" |
 ```
 
 "Reproducing the evidence": add after the code block:
 
-> `make migrate`, `make test`, `make test-browser` and `make dev` need `make infra-up` first. Node must match `.nvmrc` (`nvm use`); `scripts/toolchain.sh` fails with the fix otherwise.
+> `make migrate`, `make test`, `make test-browser`, `make dev` and `make smoke` need `make infra-up` first (PostgreSQL 16 and the Mailpit mail trap, inbox at `http://127.0.0.1:${MAILPIT_UI_PORT:-58025}`). Node must match `.nvmrc` (`nvm use`); `scripts/toolchain.sh` fails with the fix otherwise.
 
 ## 3. GAPS.md
 
@@ -228,10 +230,24 @@ The AGENTS.md red line "Identifiers and secrets" ("UUID keys, nothing guessable 
 
 ## 6. AGENTS.md, optional ("Commands" wording is stale since FND-01)
 
+Two passages of the "Commands" section are stale.
+
+### Line 68, the paragraph under `## Commands`
+
+Old:
+
+> Root command contract, implemented by the root `Makefile` (FND-01, D-001) with helpers in `scripts/`. Every target below exists. A target whose work package has not been delivered yet fails with a message naming that package instead of passing, so a missing gate and a passing gate never look alike; `make check-docs` is real from the first commit and asserts that this list and the `Makefile` agree. `make test` and `make smoke` need `make infra-up` first when the product has local infrastructure (PostgreSQL 16).
+
+New:
+
+> Root command contract, implemented by the root `Makefile` (FND-01, D-001) with helpers in `scripts/`. Every target below exists and is real since FND-01; a target added later for an undelivered work package must fail with a message naming that package instead of passing, so a missing gate and a passing gate never look alike. `make check-docs` asserts that this list and the `Makefile` agree. `make migrate`, `make test`, `make test-browser`, `make dev` and `make smoke` need `make infra-up` first (PostgreSQL 16 and the Mailpit mail trap); Node must match `.nvmrc`.
+
+### The sentence after the command list (line 98)
+
 Old:
 
 > `check-docs`, `check-locks`, `verify-chain`, the two `rebuild-*` targets, `install-hooks` and `unlock` are real from the first commit; the rest arrive with FND-01.
 
 New:
 
-> `check-docs`, `check-locks`, `verify-chain`, the two `rebuild-*` targets, `install-hooks` and `unlock` are real from the first commit; the rest are real since FND-01. `make test`, `make test-browser`, `make migrate` and `make dev` need `make infra-up` first; Node must match `.nvmrc`.
+> `check-docs`, `check-locks`, `verify-chain`, the two `rebuild-*` targets, `install-hooks` and `unlock` are real from the first commit; the rest are real since FND-01.
