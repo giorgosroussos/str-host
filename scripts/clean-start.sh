@@ -28,6 +28,8 @@ export COMPOSE_PROJECT_NAME="strhost-clean-start-$(basename "$scratch" | tr '[:u
 export DB_PORT=$(free_port)
 export APP_PORT=$(free_port)
 export VITE_PORT=$(free_port)
+export MAIL_PORT=$(free_port)
+export MAILPIT_UI_PORT=$(free_port)
 export APP_URL="http://127.0.0.1:${APP_PORT}"
 
 teardown() {
@@ -58,7 +60,7 @@ git clone --quiet --no-hardlinks "$repo" "$workdir"
 git -C "$workdir" checkout --quiet --detach "$head"
 cd "$workdir"
 
-echo "project=${COMPOSE_PROJECT_NAME} DB_PORT=${DB_PORT} APP_PORT=${APP_PORT} VITE_PORT=${VITE_PORT}"
+echo "project=${COMPOSE_PROJECT_NAME} DB_PORT=${DB_PORT} APP_PORT=${APP_PORT} VITE_PORT=${VITE_PORT} MAIL_PORT=${MAIL_PORT} MAILPIT_UI_PORT=${MAILPIT_UI_PORT}"
 
 step "make setup";    make setup
 step "make infra-up"; make infra-up

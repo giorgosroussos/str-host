@@ -1,4 +1,4 @@
-# Local infrastructure (specs/11-infrastructure-operations.md §1): PostgreSQL 16.
+# Local infrastructure (specs/11-infrastructure-operations.md §1): PostgreSQL 16 and a mail trap.
 # Started by `make infra-up`, which waits for the health check. Variables come from
 # the shell first, then from .env (Compose reads it for interpolation), so the host
 # port and credentials follow the application's DB_* settings. The Compose project
@@ -20,6 +20,24 @@ services:
               target: /docker-entrypoint-initdb.d/10-create-test-database.sql
         healthcheck:
             test: ['CMD-SHELL', 'pg_isready -h 127.0.0.1 -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"']
+            interval: 2s
+            timeout: 5s
+            retries: 30
+
+    # Development mail trap (specs/11-infrastructure-operations.md §1): every message the
+    # application sends locally lands here and never reaches a real recipient. SMTP on
+    # MAIL_PORT, web inbox and API on MAILPIT_UI_PORT, both on loopback only.
+    mailpit:
+        image: axllent/mailpit:v1.31.1@sha256:98b916bd3c8d61f7633a52d3ea2f58d00620cb01ca57ab59edde68c347a95365
+        environment:
+            MP_MAX_MESSAGES: 500
+            MP_SMTP_AUTH_ACCEPT_ANY: 1
+            MP_SMTP_AUTH_ALLOW_INSECURE: 1
+        ports:
+            - '127.0.0.1:${MAIL_PORT:-51025}:1025'
+            - '127.0.0.1:${MAILPIT_UI_PORT:-58025}:8025'
+        healthcheck:
+            test: ['CMD', '/mailpit', 'readyz']
             interval: 2s
             timeout: 5s
             retries: 30
