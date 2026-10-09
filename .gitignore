@@ -1,3 +1,4 @@
 .doc-unlock
 __pycache__/
 .claude/settings.local.json
+/base-plan.md
