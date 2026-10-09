@@ -32,7 +32,7 @@ CI baseline — `specs/15-implementation-plan.md` package FND-02, Phase 0. Accep
 - [ ] AC4: Every gate the testing specification requires but nothing implements yet is a failing-forward tripwire: a job that passes only while the gate is provably absent and fails with promotion instructions the moment it becomes runnable. A missing gate and a silently passing gate must never look alike.
 - [ ] AC5: Dependency and secret scanning; artifact and cache strategy; no job retries.
 
-## Proposed file surface (PENDING OWNER APPROVAL — the pre-W10 plan states none)
+## File surface (approved by the owner 2026-10-09)
 Owns (exclusive while in flight):
 - `.github/workflows/**`
 - `README.md` "Continuous integration" section only

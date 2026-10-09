@@ -39,7 +39,7 @@ Command contract and repository scaffold — `specs/15-implementation-plan.md` p
 - `make clean-start` exit 0 from removed volumes to teardown.
 - `make check-docs` exit 0; `TRACEABILITY.md` FND-01 row set to `done` with the commands and their results as evidence; G-001 narrowed accordingly.
 
-## Proposed file surface (PENDING OWNER APPROVAL — the pre-W10 plan states none)
+## File surface (approved by the owner 2026-10-09)
 Owns (exclusive while in flight):
 - everything outside the frozen pack: the Laravel 13 scaffold (`app/**`, `bootstrap/**`, `config/**`, `routes/**`, `resources/**`, `database/**`, `public/**`, `storage/**`, `lang/**`, `tests/**`)
 - `composer.json`, `composer.lock`, `package.json`, `package-lock.json`, `vite.config.ts`, `tsconfig.json`, tool configs (Pint, Larastan `phpstan.neon`, ESLint, Prettier, Pest/`phpunit.xml`)

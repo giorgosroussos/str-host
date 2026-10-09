@@ -28,7 +28,7 @@ Account lifecycle and data requests — `specs/15-implementation-plan.md` packag
 ## Acceptance criteria (word for word, `specs/15` OPS-02)
 - [ ] AC1: Suspend, export, delete and person export or erasure commands (`10` §6–§7, `11` §4).
 
-## Proposed file surface (PENDING OWNER APPROVAL — the pre-W10 plan states none)
+## File surface (approved by the owner 2026-10-09)
 Owns (exclusive while in flight):
 - `app/Actions/{AccountLifecycle,DataRequests}/**`
 - `app/Console/Commands/Operator/{Suspend,Export,Delete}Account*`, `*Person*`

@@ -28,7 +28,7 @@ Expenses and receipts — `specs/15-implementation-plan.md` package MON-02, Phas
 ## Acceptance criteria (word for word, `specs/15` MON-02)
 - [ ] AC1: Expenses and receipt files (`06` §6), stored and served per `03` §2 and `10` §5.
 
-## Proposed file surface (PENDING OWNER APPROVAL — the pre-W10 plan states none)
+## File surface (approved by the owner 2026-10-09)
 Owns (exclusive while in flight):
 - `app/Models/{Expense,Receipt}.php` + migrations + factories
 - `app/Actions/Expenses/**`, `app/Policies/{Expense,Receipt}Policy.php`

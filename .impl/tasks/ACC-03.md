@@ -28,7 +28,7 @@ Logins, invitations, roles and second factor — `specs/15-implementation-plan.m
 ## Acceptance criteria (word for word, `specs/15` ACC-03)
 - [ ] AC1: Invitations, the admin and operations roles, the permission matrix as policies, the owner login type, and the second factor (`07` §1–§4, `10` §9).
 
-## Proposed file surface (PENDING OWNER APPROVAL — the pre-W10 plan states none)
+## File surface (approved by the owner 2026-10-09)
 Owns (exclusive while in flight):
 - `app/Models/Login.php` (roles, owner login type), invitations model/migration
 - `app/Actions/Logins/**`, `app/Actions/Invitations/**`

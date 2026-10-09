@@ -28,7 +28,7 @@ Owners and properties — `specs/15-implementation-plan.md` package PRP-01, Phas
 ## Acceptance criteria (word for word, `specs/15` PRP-01)
 - [ ] AC1: Owners, properties with bilingual guest text and coordinates, ownership periods and self-owned properties (`03` §2–§3), and archiving (`03` §4).
 
-## Proposed file surface (PENDING OWNER APPROVAL — the pre-W10 plan states none)
+## File surface (approved by the owner 2026-10-09)
 Owns (exclusive while in flight):
 - `app/Models/{Owner,Property,OwnershipPeriod}.php` + migrations + factories
 - `app/Actions/{Owners,Properties}/**`, `app/Policies/{Owner,Property}Policy.php`

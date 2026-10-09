@@ -28,7 +28,7 @@ Statement lifecycle — `specs/15-implementation-plan.md` package MON-03, Phase 
 ## Acceptance criteria (word for word, `specs/15` MON-03)
 - [ ] AC1: Drafts, finalisation snapshot, payout recording, the self-owned monthly view (`06` §9).
 
-## Proposed file surface (PENDING OWNER APPROVAL — the pre-W10 plan states none)
+## File surface (approved by the owner 2026-10-09)
 Owns (exclusive while in flight):
 - `app/Models/{Statement,Payout}.php` + migrations
 - `app/Actions/Statements/**` (draft, finalise snapshot, payout), `app/Policies/StatementPolicy.php`

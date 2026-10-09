@@ -28,7 +28,7 @@ Owner portal — `specs/15-implementation-plan.md` package OUT-01, Phase 5. Acce
 ## Acceptance criteria (word for word, `specs/15` OUT-01)
 - [ ] AC1: The read-only portal of `08` §1 with statements, receipts and PDFs.
 
-## Proposed file surface (PENDING OWNER APPROVAL — the pre-W10 plan states none)
+## File surface (approved by the owner 2026-10-09)
 Owns (exclusive while in flight):
 - `app/Http/Controllers/Owner/**`, `resources/js/Pages/Owner/**`, `routes/owner/*.php`, `lang/{el,en}/owner.php`
 - `tests/{Feature,Isolation}/OwnerPortal/**`, `tests/Feature/Leaks/OwnerPortal*`, `tests/Browser/Owner*`

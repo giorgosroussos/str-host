@@ -30,7 +30,7 @@ Design, accessibility and localization foundation — `specs/15-implementation-p
 - [ ] AC2: Localization skeleton with the fallback rule of `09` §6; no hard-coded UI strings.
 - [ ] AC3: Automated accessibility smoke test wired as a real gate, replacing its tripwire (`09` §9, `12` §1).
 
-## Proposed file surface (PENDING OWNER APPROVAL — the pre-W10 plan states none)
+## File surface (approved by the owner 2026-10-09)
 Owns (exclusive while in flight):
 - `resources/js/Components/**`, `resources/js/Layouts/**`, `resources/css/**`
 - `resources/js/navigation/**` (staff navigation registry)

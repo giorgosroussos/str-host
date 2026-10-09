@@ -28,7 +28,7 @@ Adjustments and carry-forward — `specs/15-implementation-plan.md` package MON-
 ## Acceptance criteria (word for word, `specs/15` MON-04)
 - [ ] AC1: Computed adjustments after finalisation and negative carry-forward (`06` §7–§8).
 
-## Proposed file surface (PENDING OWNER APPROVAL — the pre-W10 plan states none)
+## File surface (approved by the owner 2026-10-09)
 Owns (exclusive while in flight):
 - `app/Models/Adjustment.php` + migration
 - `app/Actions/Adjustments/**`, `app/Policies/AdjustmentPolicy.php`

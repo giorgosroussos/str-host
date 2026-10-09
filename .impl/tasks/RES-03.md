@@ -28,7 +28,7 @@ Calendar and timeline — `specs/15-implementation-plan.md` package RES-03, Phas
 ## Acceptance criteria (word for word, `specs/15` RES-03)
 - [ ] AC1: Per-property calendar and the multi-property timeline as the staff home (`04` §6, `09` §1).
 
-## Proposed file surface (PENDING OWNER APPROVAL — the pre-W10 plan states none)
+## File surface (approved by the owner 2026-10-09)
 Owns (exclusive while in flight):
 - `app/Http/Controllers/Staff/{Timeline,Calendar}/**`, `resources/js/Pages/Staff/{Timeline,Calendar}/**`
 - `routes/staff/timeline.php`, `lang/{el,en}/timeline.php`

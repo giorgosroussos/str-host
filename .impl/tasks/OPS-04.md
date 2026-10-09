@@ -28,7 +28,7 @@ Release acceptance — `specs/15-implementation-plan.md` package OPS-04, Phase 6
 ## Acceptance criteria (word for word, `specs/15` OPS-04)
 - [ ] AC1: Every journey of `12` §6 and the release gate of `12` §7.
 
-## Proposed file surface (PENDING OWNER APPROVAL — the pre-W10 plan states none)
+## File surface (approved by the owner 2026-10-09)
 Owns (exclusive while in flight):
 - `tests/Browser/**` (complete the seven journeys of 12 §6)
 - release evidence in `TRACEABILITY.md` via LANDING only

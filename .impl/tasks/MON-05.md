@@ -28,7 +28,7 @@ Statement PDF and email — `specs/15-implementation-plan.md` package MON-05, Ph
 ## Acceptance criteria (word for word, `specs/15` MON-05)
 - [ ] AC1: The PDF in both languages and the finalisation email (`06` §9, `09` §7).
 
-## Proposed file surface (PENDING OWNER APPROVAL — the pre-W10 plan states none)
+## File surface (approved by the owner 2026-10-09)
 Owns (exclusive while in flight):
 - `app/Pdf/**` or `resources/views/pdf/statement*.blade.php` (dompdf, DejaVu Sans, D-007)
 - `app/Jobs/{RenderStatementPdf,SendStatementEmail}*`, `app/Mail/StatementFinalised*`

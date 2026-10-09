@@ -28,7 +28,7 @@ Production deployment and backups — `specs/15-implementation-plan.md` package 
 ## Acceptance criteria (word for word, `specs/15` OPS-03)
 - [ ] AC1: The production setup of `11` §2–§3, backups and a rehearsed restore (`11` §5).
 
-## Proposed file surface (PENDING OWNER APPROVAL — the pre-W10 plan states none)
+## File surface (approved by the owner 2026-10-09)
 Owns (exclusive while in flight):
 - `deploy/**`, `docker-compose.prod.yml`, proxy/TLS config, `scripts/backup/**`, restore runbook under `docs/operations/**`
 

@@ -28,7 +28,7 @@ Guest page and map — `specs/15-implementation-plan.md` package OUT-02, Phase 5
 ## Acceptance criteria (word for word, `specs/15` OUT-02)
 - [ ] AC1: The guest page of `08` §2 with the self-hosted map (`02` §5, `11` §7).
 
-## Proposed file surface (PENDING OWNER APPROVAL — the pre-W10 plan states none)
+## File surface (approved by the owner 2026-10-09)
 Owns (exclusive while in flight):
 - guest-link token hash migration on reservations + issue/reissue action `app/Actions/GuestLinks/**`
 - `app/Http/Controllers/Guest/**`, `resources/js/Pages/Guest/**`, `routes/guest.php`

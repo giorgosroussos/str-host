@@ -28,7 +28,7 @@ Turnovers — `specs/15-implementation-plan.md` package RES-04, Phase 3. Accepta
 ## Acceptance criteria (word for word, `specs/15` RES-04)
 - [ ] AC1: Turnovers at check-out, assignment, completion by staff, cost and following the reservation (`05` §1–§2).
 
-## Proposed file surface (PENDING OWNER APPROVAL — the pre-W10 plan states none)
+## File surface (approved by the owner 2026-10-09)
 Owns (exclusive while in flight):
 - `app/Models/Turnover.php` + migration + factory
 - `app/Actions/Turnovers/**`, `app/Policies/TurnoverPolicy.php`

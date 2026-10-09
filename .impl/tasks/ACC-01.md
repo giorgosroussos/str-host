@@ -28,7 +28,7 @@ Tenancy and isolation harness — `specs/15-implementation-plan.md` package ACC-
 ## Acceptance criteria (word for word, `specs/15` ACC-01)
 - [ ] AC1: `company_id` and the global scope of `02` §3 on a first tenant model; the isolation suite of `12` §3 as a reusable harness every later package extends.
 
-## Proposed file surface (PENDING OWNER APPROVAL — the pre-W10 plan states none)
+## File surface (approved by the owner 2026-10-09)
 Owns (exclusive while in flight):
 - `app/Models/Account.php`, `app/Models/Concerns/BelongsToAccount*` (global scope), `app/Support/Tenancy/**`
 - accounts migration + first tenant model migration

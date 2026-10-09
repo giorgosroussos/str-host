@@ -28,7 +28,7 @@ Property terms — `specs/15-implementation-plan.md` package PRP-02, Phase 2. Ac
 ## Acceptance criteria (word for word, `specs/15` PRP-02)
 - [ ] AC1: Fee model, cleaning-fee keeper, turnover-cost payer and the account VAT rate (`06` §2), admin only (`07` §2).
 
-## Proposed file surface (PENDING OWNER APPROVAL — the pre-W10 plan states none)
+## File surface (approved by the owner 2026-10-09)
 Owns (exclusive while in flight):
 - `app/Models/PropertyTerms.php` + migration; migration adding the account VAT rate
 - `app/Actions/PropertyTerms/**`, `app/Policies/PropertyTermsPolicy.php`

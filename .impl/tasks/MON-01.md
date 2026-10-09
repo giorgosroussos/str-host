@@ -28,7 +28,7 @@ Calculation engine — `specs/15-implementation-plan.md` package MON-01, Phase 4
 ## Acceptance criteria (word for word, `specs/15` MON-01)
 - [ ] AC1: The pure calculation of `06` §1–§4 and §7 in `app/Money`, with the golden tests of `12` §5.
 
-## Proposed file surface (PENDING OWNER APPROVAL — the pre-W10 plan states none)
+## File surface (approved by the owner 2026-10-09)
 Owns (exclusive while in flight):
 - `app/Money/**` only (no database, no framework calls; 02 §1)
 - `tests/Unit/Money/**` (golden tests of 12 §5)

@@ -28,7 +28,7 @@ Dashboard and cleaner pay summary — `specs/15-implementation-plan.md` package 
 ## Acceptance criteria (word for word, `specs/15` MON-06)
 - [ ] AC1: The admin dashboard (`09` §2) and the cleaner pay summary (`05` §4).
 
-## Proposed file surface (PENDING OWNER APPROVAL — the pre-W10 plan states none)
+## File surface (approved by the owner 2026-10-09)
 Owns (exclusive while in flight):
 - `app/Http/Controllers/Staff/{Dashboard,CleanerPay}/**`, `resources/js/Pages/Staff/{Dashboard,CleanerPay}/**`
 - `app/Queries/{Dashboard,CleanerPay}/**`

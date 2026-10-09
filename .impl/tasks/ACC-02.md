@@ -28,7 +28,7 @@ Sign-up, approval and terms — `specs/15-implementation-plan.md` package ACC-02
 ## Acceptance criteria (word for word, `specs/15` ACC-02)
 - [ ] AC1: Public sign-up with email verification, a pending state until the operator command approves it, and recorded terms acceptance (`01` §4, `10` §8, `11` §4).
 
-## Proposed file surface (PENDING OWNER APPROVAL — the pre-W10 plan states none)
+## File surface (approved by the owner 2026-10-09)
 Owns (exclusive while in flight):
 - `app/Actions/Accounts/**` (sign-up, approval)
 - terms acceptance + terms versions model/migration

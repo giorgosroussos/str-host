@@ -28,7 +28,7 @@ Retention jobs — `specs/15-implementation-plan.md` package OPS-01, Phase 6. Ac
 ## Acceptance criteria (word for word, `specs/15` OPS-01)
 - [ ] AC1: Anonymisation and erasure of `10` §5 on the scheduler.
 
-## Proposed file surface (PENDING OWNER APPROVAL — the pre-W10 plan states none)
+## File surface (approved by the owner 2026-10-09)
 Owns (exclusive while in flight):
 - `app/Actions/Retention/**`, `app/Jobs/Retention/**`
 - `tests/Feature/Retention/**`

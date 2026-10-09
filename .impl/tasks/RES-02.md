@@ -28,7 +28,7 @@ Money lines and climate fee rates — `specs/15-implementation-plan.md` package 
 ## Acceptance criteria (word for word, `specs/15` RES-02)
 - [ ] AC1: Money lines, the installation rate table and its operator command, and climate fee prefill (`04` §5, `06` §5).
 
-## Proposed file surface (PENDING OWNER APPROVAL — the pre-W10 plan states none)
+## File surface (approved by the owner 2026-10-09)
 Owns (exclusive while in flight):
 - money-lines migration/model, `app/Models/ClimateFeeRate.php` + migration (installation-wide)
 - `app/Actions/MoneyLines/**`, `app/Actions/ClimateFeeRates/**`, `app/Console/Commands/Operator/*ClimateFeeRate*`

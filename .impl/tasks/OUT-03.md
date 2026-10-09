@@ -28,7 +28,7 @@ Cleaner link — `specs/15-implementation-plan.md` package OUT-03, Phase 5. Acce
 ## Acceptance criteria (word for word, `specs/15` OUT-03)
 - [ ] AC1: The cleaner page of `08` §3 with marking done.
 
-## Proposed file surface (PENDING OWNER APPROVAL — the pre-W10 plan states none)
+## File surface (approved by the owner 2026-10-09)
 Owns (exclusive while in flight):
 - `app/Http/Middleware/ResolveLinkToken*` (shared by guest and cleaner)
 - `resources/js/Pages/Shared/InactiveLink.vue` (08 §4, D-032)

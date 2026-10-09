@@ -28,7 +28,7 @@ Audit trail — `specs/15-implementation-plan.md` package ACC-04, Phase 1. Accep
 ## Acceptance criteria (word for word, `specs/15` ACC-04)
 - [ ] AC1: The audit entry of `03` §6 and its admin view (`10` §4), ready for every later money-affecting model.
 
-## Proposed file surface (PENDING OWNER APPROVAL — the pre-W10 plan states none)
+## File surface (approved by the owner 2026-10-09)
 Owns (exclusive while in flight):
 - `app/Models/AuditEntry.php`, its migration, `app/Audit/**` (recorder later packages call)
 - `app/Http/Controllers/Staff/Audit/**`, `resources/js/Pages/Staff/Audit/**`

@@ -28,7 +28,7 @@ Reservations and overlap — `specs/15-implementation-plan.md` package RES-01, P
 ## Acceptance criteria (word for word, `specs/15` RES-01)
 - [ ] AC1: Reservation entry, channels, lifecycle and cancellation, and the overlap constraint (`04` §1–§4).
 
-## Proposed file surface (PENDING OWNER APPROVAL — the pre-W10 plan states none)
+## File surface (approved by the owner 2026-10-09)
 Owns (exclusive while in flight):
 - `app/Models/Reservation.php` + migrations (exclusion constraint) + factory
 - `app/Actions/Reservations/**`, `app/Policies/ReservationPolicy.php`
