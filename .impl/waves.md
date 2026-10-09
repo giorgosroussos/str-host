@@ -28,7 +28,7 @@ Proposed; pending owner approval (`.impl/roadmap-proposal.md`). Phases run in pl
 After wave 20: **Phase 6 exit** (release gate `12` §7 on the production host) + PO checkpoint before launch.
 
 ```
-Wave 1 (alone): FND-01
+Wave 1 (alone): FND-01  ✅ delivered (tag wave-1)
 Wave 2: FND-02
 Wave 3: FND-03
 Wave 4: ACC-01
