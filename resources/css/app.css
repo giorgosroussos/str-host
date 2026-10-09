@@ -1,0 +1,6 @@
+@layer theme, base, primevue, components, utilities;
+
+@import 'tailwindcss' source(none);
+
+@source '../views';
+@source '../js';

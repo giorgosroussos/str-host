@@ -1,0 +1,33 @@
+# Local infrastructure (specs/11-infrastructure-operations.md §1): PostgreSQL 16.
+# Started by `make infra-up`, which waits for the health check. Variables come from
+# the shell first, then from .env (Compose reads it for interpolation), so the host
+# port and credentials follow the application's DB_* settings. The Compose project
+# name defaults to the directory name, so each clone or worktree has its own volume.
+
+services:
+    postgres:
+        image: postgres:16-alpine
+        environment:
+            POSTGRES_DB: ${DB_DATABASE:-str_host}
+            POSTGRES_USER: ${DB_USERNAME:-str_host}
+            POSTGRES_PASSWORD: ${DB_PASSWORD:-str_host_local_only}
+        ports:
+            - '127.0.0.1:${DB_PORT:-54316}:5432'
+        volumes:
+            - postgres-data:/var/lib/postgresql/data
+        configs:
+            - source: create-test-database
+              target: /docker-entrypoint-initdb.d/10-create-test-database.sql
+        healthcheck:
+            test: ['CMD-SHELL', 'pg_isready -h 127.0.0.1 -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"']
+            interval: 2s
+            timeout: 5s
+            retries: 30
+
+configs:
+    create-test-database:
+        content: |
+            CREATE DATABASE str_host_test;
+
+volumes:
+    postgres-data:
