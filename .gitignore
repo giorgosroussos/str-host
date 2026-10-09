@@ -22,3 +22,4 @@ __pycache__/
 /vendor
 /tests/Browser/Screenshots
 /.clean-start
+/.claude/worktrees/

@@ -190,3 +190,4 @@ It writes none of `.log/**`, DECISIONS.md, QUESTIONS.md, PLAN.md, GAPS.md, TRACE
 
 **Critical / high findings: none.**
 - 2026-10-09: verifier round 2 PASS at c777e10. Low notes carried as follow-ups. Event 8 owner approval is genuine (owner said 'approve the ADR' in session).
+- 2026-10-09: integrated via slow path (integrator agent), impl/wave-1 fast-forwarded to 5880b77. Only conflict: this task file's Log. Gates green on merged result.
