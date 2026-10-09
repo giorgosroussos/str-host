@@ -1,6 +1,8 @@
 # FND-01 landing block
 
-Worker branch `impl/FND-01`, code commit `fd0eaca4c87b90f20a2793be6d563e6cca487ac6`. Apply on top of the merged branch: event log first, then the projections, then the living documents. Placeholder IDs: replace `D-NEW-1`…`D-NEW-4` with the next free D-numbers and `Q-NEW-1` with the next free Q-number, consistently everywhere below (including G-002).
+Worker branch `impl/FND-01`, code commit `fd0eaca4c87b90f20a2793be6d563e6cca487ac6`. Apply on top of the merged branch: event log first, then the projections, then the living documents. Placeholder IDs: replace `D-NEW-1`…`D-NEW-5` with the next free D-numbers and `Q-NEW-1` with the next free Q-number, consistently everywhere below, including G-002 and the spec texts in §5. On the 2026-10-09 log these are D-042…D-046 and Q-098.
+
+Dry run: the whole sequence below was applied with those real IDs to a scratch copy of this branch: events, both rebuilds and the two spec edits of §5. `log-append` accepted every event (seq 335–343). `python3 scripts/check-docs.py` then reported `summary: 0 failure(s)`, with Q-098 Resolved, D-046 rendered as `Type: adr` and the chain intact.
 
 ## 1. Events (date 2026-10-09)
 
@@ -58,6 +60,8 @@ python3 scripts/log-append.py --type decision-added \
 
 ### Event 5: Q-NEW-1 (card-opened)
 
+Correction to the first report: `blocks` must be `specification`. `log-append` refuses any other value on `card-opened`. The card is Blocking until answered, and the owner has answered it (Event 6).
+
 Save the payload as `q-new-1.json` (a JSON array, as `--payload-file` expects for the questions stream), then append:
 
 ```json
@@ -68,10 +72,10 @@ Save the payload as `q-new-1.json` (a JSON array, as `--payload-file` expects fo
     "surface": "data",
     "source": "FND-01 implementation: `03` §1: \"Every table MUST use a UUID primary key\"; Laravel's migrations table (integer id) and database-queue tables jobs and failed_jobs (bigint ids) cannot follow it without a custom queue driver",
     "question": "Do framework infrastructure tables (migrations, jobs, failed_jobs, job_batches, cache, sessions, password reset tokens) fall under the UUID primary-key rule of `03` §1?",
-    "blocks": "ACC-02",
+    "blocks": "specification",
     "options": [
       "A) Yes, every table → effect on data: a custom database queue driver or database-generated keys (UUIDv4, against D-009) and a patched migration repository; more code to maintain",
-      "B) No, the rule covers product tables; framework tables keep their keys because none is ever exposed in a URL → effect on data: `03` §1 gains an explicit exemption by spec amendment, and the queue tables ship with their stock schema"
+      "B) No, the rule covers product tables; framework tables keep their keys because none is ever exposed in a URL → effect on data: `03` §1 gains an explicit exemption, and the queue tables ship with their stock schema"
     ],
     "recommendation": "B, because those keys never leave the server and the rule's purpose (nothing guessable in a URL) is met. Needed before the first queued email (ACC-02, `02` §6)."
   }
@@ -82,7 +86,46 @@ Save the payload as `q-new-1.json` (a JSON array, as `--payload-file` expects fo
 python3 scripts/log-append.py --stream questions --type card-opened --payload-file q-new-1.json
 ```
 
-### Event 6: rebuild the projections
+### Event 6: owner answers Q-NEW-1 (card-answered)
+
+```bash
+python3 scripts/log-append.py --stream questions --actor owner --type card-answered \
+  --set id=Q-NEW-1 --set answer=B --set date=2026-10-09 --set recommendation_accepted=true
+```
+
+### Event 7: D-NEW-5, the decision the answer produces (ADR, pending until Event 8)
+
+The `03` §1 rule is also the locked register bullet `14` §1 ("Every table MUST use a UUID primary key …") and the AGENTS.md red line "Identifiers and secrets". The AGENTS.md amendment regime (D-002) excludes both from a `spec-amendment` decision: changing them needs an `adr` entry with owner approval. This event is therefore `type=adr`, not the `spec-amendment` the coordinator asked for. It opens as `pending`, and the owner's approval is its own event (Event 8). The spec edits it describes are in §5. The pack's `check-docs` accepts only `[input]` and `[Q-NNN]` tags in the register and validates a D-tag only when it stands alone, so the amended statements cite the card (`[input, Q-NEW-1]`) and this ADR cites the card.
+
+```bash
+python3 scripts/log-append.py --type decision-added \
+  --set id=D-NEW-5 --set date=2026-10-09 \
+  --set title="Framework infrastructure tables keep their own keys" \
+  --set type=adr --set approval=pending \
+  --set decision="The UUID primary-key rule covers the product's tables. The framework's own infrastructure tables (migrations, the database-queue tables jobs, failed_jobs and job_batches, cache, sessions, password reset tokens) keep their stock keys; none of those keys is ever exposed in a URL. \`03\` §1 and the locked register bullet in \`14\` §1 state the exemption, tagged Q-NEW-1. The queue tables ship with their stock schema when the first package queues work." \
+  --set why="Owner answer B to Q-NEW-1: Laravel's migrations table and database queue (D-025) depend on integer keys, and the rule's purpose, nothing guessable in a URL (\`03\` §1), is met because those keys never leave the server. Option A needed a custom queue driver or database-generated UUIDv4 keys against D-009." \
+  --set alternatives="A) UUID keys on every table including framework tables (rejected by the owner: custom queue driver or database-generated UUIDv4 against D-009, patched migration repository, more code to maintain)." \
+  --set affected_specs="\`03\` §1, \`14\` §1."
+```
+
+### Event 8: owner approves D-NEW-5 (adr-approval-changed)
+
+```bash
+python3 scripts/log-append.py --actor owner --type adr-approval-changed \
+  --set id=D-NEW-5 --set approval=granted --set approval_date=2026-10-09
+```
+
+### Event 9: Q-NEW-1 resolved (card-resolved)
+
+The `card-resolved` payload is only `{"id"}`: `eventlog.py` drops any other field. The resolution is carried by the spec statements tagged `[Q-NEW-1]` (§5) and by D-NEW-5. The pack logs every `card-resolved` with `actor: agent` (seq 328, 330, 334), so this one follows suit. Add `--actor owner` if the coordinator wants the owner on it as well; the log accepts either.
+
+```bash
+python3 scripts/log-append.py --stream questions --type card-resolved --set id=Q-NEW-1
+```
+
+Apply the two spec edits of §5 in the same change (after `make unlock` for each hard-locked spec file).
+
+### Event 10: rebuild the projections
 
 ```bash
 make rebuild-decisions && make rebuild-questions
@@ -111,7 +154,7 @@ G-001, narrowed (replaces the current row):
 G-002, new:
 
 ```
-| G-002 | The database queue tables (jobs, failed_jobs, job_batches) are not migrated, and `make dev` runs no queue worker, pending Q-NEW-1. | Nothing can be queued yet; a dispatch on the `database` connection fails loudly. | Queue migration and a `queue:work` process in `make dev`, plus a test that dispatches a job on PostgreSQL. | ACC-02 |
+| G-002 | The database queue tables (jobs, failed_jobs, job_batches) are not migrated, and `make dev` runs no queue worker. Q-NEW-1 is answered (B, D-NEW-5): the tables ship with their stock schema when the first package queues work. | Nothing can be queued yet; a dispatch on the `database` connection fails loudly. | Queue migration and a `queue:work` process in `make dev`, plus a test that dispatches a job on PostgreSQL. | ACC-02 |
 ```
 
 ## 4. PLAN.md
@@ -142,9 +185,46 @@ Remove the `### FND-01 — Command contract and repository scaffold` section fro
 2. **ACC-01 — Tenancy and isolation harness.** `company_id` and the global scope on a first tenant model; the isolation suite as a reusable harness (`15` §4, `02` §3, `12` §3).
 ```
 
-## 5. Spec amendments
+## 5. Spec amendments (under ADR D-NEW-5)
 
-None.
+`specs/**` is hard-locked, so the owner runs one ceremony per file at landing:
+
+```bash
+make unlock PATH=specs/03-domain-model.md REASON="D-NEW-5 / Q-NEW-1: framework infrastructure tables exempt from the UUID key rule"
+make unlock PATH=specs/14-decision-register.md REASON="D-NEW-5 / Q-NEW-1: register bullet follows 03 §1"
+```
+
+### `specs/03-domain-model.md` §1, first bullet
+
+Old:
+
+```
+- Every table MUST use a UUID primary key, and no URL MAY expose a sequential or guessable identifier. [input]
+```
+
+New:
+
+```
+- Every table MUST use a UUID primary key, except the framework's own infrastructure tables (migrations, queue, cache, sessions, password reset tokens), and no URL MAY expose a sequential or guessable identifier. [input, Q-NEW-1]
+```
+
+### `specs/14-decision-register.md` §1, first bullet
+
+This bullet is the locked compression of `03` §1. Without the edit, the register and the domain spec would contradict each other.
+
+Old:
+
+```
+- Every table MUST use a UUID primary key and every amount MUST be stored as integer cents (`03` §1). [input]
+```
+
+New:
+
+```
+- Every table except the framework's own infrastructure tables MUST use a UUID primary key and every amount MUST be stored as integer cents (`03` §1). [input, Q-NEW-1]
+```
+
+The AGENTS.md red line "Identifiers and secrets" ("UUID keys, nothing guessable in a URL") can stay as it is: it summarises the rule and cites `03` §1, where the exemption now lives.
 
 ## 6. AGENTS.md, optional ("Commands" wording is stale since FND-01)
 
