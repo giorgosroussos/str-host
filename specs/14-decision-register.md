@@ -4,7 +4,7 @@ Each bullet below is an owner decision: stated in the requirements (`[input]`) o
 
 ## 1. Data
 
-- Every table MUST use a UUID primary key and every amount MUST be stored as integer cents (`03` §1). [input]
+- Every table except the framework's own infrastructure tables MUST use a UUID primary key and every amount MUST be stored as integer cents (`03` §1). [input, Q-098]
 - A login MUST belong to exactly one account, with email unique across the installation (`03` §2). [Q-001]
 - An owner MUST have exactly one login (`03` §2). [Q-002]
 - A property MUST have at most one owner on any date (`03` §3). [Q-003]

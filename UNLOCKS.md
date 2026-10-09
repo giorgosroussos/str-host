@@ -14,3 +14,6 @@ Never edit or remove a line here. The point of the file is that it cannot be tid
 
 ## Records
 - unlock 2026-10-09T13:56:33Z path=".doc-locks" by="Giorgos Roussos" reason="freeze 1.0: promote specs/** to hard-locked"
+- unlock 2026-10-09T15:07:40Z path="specs/03-domain-model.md" by="Giorgos Roussos" reason="land FND-01: ADR D-NEW-5 exempts framework tables from the UUID rule (Q-NEW-1)"
+- unlock 2026-10-09T15:07:51Z path="specs/03-domain-model.md" by="Giorgos Roussos" reason="land FND-01: ADR D-NEW-5 exempts framework tables from the UUID rule (Q-NEW-1)"
+- unlock 2026-10-09T15:07:51Z path="specs/14-decision-register.md" by="Giorgos Roussos" reason="land FND-01: register bullet restates 03 §1, amended with ADR D-NEW-5 (Q-NEW-1)"

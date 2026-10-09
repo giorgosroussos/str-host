@@ -6,7 +6,7 @@ Implementation status and evidence per work package (`specs/15-implementation-pl
 
 | Package | Phase | Outcome | Key specs | Status | Evidence |
 | --- | --- | --- | --- | --- | --- |
-| FND-01 | 0 | Command contract and repository scaffold | `02` §1–§2, `12` §1–§2 | not started | — |
+| FND-01 | 0 | Command contract and repository scaffold | `02` §1–§2, `12` §1–§2 | done | 2026-10-09, impl/FND-01 71bff28: `make clean-start` exit 0 (fresh clone → setup, infra-up [PostgreSQL 16 + Mailpit mail trap], migrate, verify, dev, smoke, teardown); `make verify` exit 0 (lint, format-check, typecheck, test 13 passed incl. tests/Feature/DatabaseEngineTest [pgsql 16] and tests/Feature/HomePageTest [no third-party host], test-browser 2 passed with axe, build, check-docs 0 failures); `make smoke` passed against `make dev`, including a mail sent by the application landing in the mail trap (`11` §1); `make audit` 0 advisories; `make scan-secrets` no leaks; `make help` no "not implemented" |
 | FND-02 | 0 | CI baseline | `12` §1 | not started | — |
 | FND-03 | 0 | Design, accessibility and localization foundation | `02` §4, `09` §5–§6, `09` §9 | not started | — |
 | ACC-01 | 1 | Tenancy and isolation harness | `02` §3, `12` §3 | not started | — |
@@ -64,5 +64,7 @@ make audit        # the CI dependency-scan gate
 make scan-secrets # the CI secret-scan gate
 make check-docs   # runs today, before any code exists
 ```
+
+`make migrate`, `make test`, `make test-browser`, `make dev` and `make smoke` need `make infra-up` first (PostgreSQL 16 and the Mailpit mail trap, inbox at `http://127.0.0.1:${MAILPIT_UI_PORT:-58025}`). Node must match `.nvmrc` (`nvm use`); `scripts/toolchain.sh` fails with the fix otherwise.
 
 `make clean-start` runs the same sequence from a fresh environment and tears it down afterwards. Evidence recorded in this file names the command, the date and what it proved; a reviewer must be able to repeat it from this section.

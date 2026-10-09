@@ -120,6 +120,7 @@ Every card opens `Blocking` and is answered before the specification proceeds. `
 - Q-095 — Staff roles are fixed — security — Resolved
 - Q-096 — Timezone of other dates — external — Resolved
 - Q-097 — Guest link on a cancelled reservation — security — Resolved
+- Q-098 — UUID keys on framework infrastructure tables — data — Resolved
 
 ## Blocking
 
@@ -1232,3 +1233,14 @@ None.
 - Recommendation: A, because access details are for guests who are coming. Can be deferred to OUT-02.
 - Blocks: specification
 - Answer: A (2026-10-09)
+
+### Q-098 — UUID keys on framework infrastructure tables
+- Surface: data
+- Source: FND-01 implementation: `03` §1: "Every table MUST use a UUID primary key"; Laravel's migrations table (integer id) and database-queue tables jobs and failed_jobs (bigint ids) cannot follow it without a custom queue driver
+- Question: Do framework infrastructure tables (migrations, jobs, failed_jobs, job_batches, cache, sessions, password reset tokens) fall under the UUID primary-key rule of `03` §1?
+- Options:
+  - A) Yes, every table → effect on data: a custom database queue driver or database-generated keys (UUIDv4, against D-009) and a patched migration repository; more code to maintain
+  - B) No, the rule covers product tables; framework tables keep their keys because none is ever exposed in a URL → effect on data: `03` §1 gains an explicit exemption, and the queue tables ship with their stock schema
+- Recommendation: B, because those keys never leave the server and the rule's purpose (nothing guessable in a URL) is met. Needed before the first queued email (ACC-02, `02` §6).
+- Blocks: specification
+- Answer: B (2026-10-09; recommendation accepted)

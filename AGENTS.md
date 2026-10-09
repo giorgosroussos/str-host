@@ -65,7 +65,7 @@ Development runs on localhost with Docker Compose for PostgreSQL and a mail-trap
 
 ## Commands
 
-Root command contract, implemented by the root `Makefile` (FND-01, D-001) with helpers in `scripts/`. Every target below exists. A target whose work package has not been delivered yet fails with a message naming that package instead of passing, so a missing gate and a passing gate never look alike; `make check-docs` is real from the first commit and asserts that this list and the `Makefile` agree. `make test` and `make smoke` need `make infra-up` first when the product has local infrastructure (PostgreSQL 16).
+Root command contract, implemented by the root `Makefile` (FND-01, D-001) with helpers in `scripts/`. Every target below exists and is real since FND-01; a target added later for an undelivered work package must fail with a message naming that package instead of passing, so a missing gate and a passing gate never look alike. `make check-docs` asserts that this list and the `Makefile` agree. `make migrate`, `make test`, `make test-browser`, `make dev` and `make smoke` need `make infra-up` first (PostgreSQL 16 and the Mailpit mail trap); Node must match `.nvmrc`.
 
 ```bash
 make setup          # install dependencies from lockfiles, copy env examples
@@ -95,7 +95,7 @@ make unlock         # ceremonial unlock of one hard-locked path: PATH=<path> REA
 make clean-start    # fresh isolated environment: setup, infra-up, migrate, verify, smoke, teardown
 ```
 
-`check-docs`, `check-locks`, `verify-chain`, the two `rebuild-*` targets, `install-hooks` and `unlock` are real from the first commit; the rest arrive with FND-01.
+`check-docs`, `check-locks`, `verify-chain`, the two `rebuild-*` targets, `install-hooks` and `unlock` are real from the first commit; the rest are real since FND-01.
 
 CI (FND-02) runs on every merge request and every push to the default branch. Each job runs exactly one of the targets above, so a gate cannot pass in CI and fail locally; `README.md` maps job to command. Gates the testing specification requires that nothing implements yet run as failing-forward tripwires that pass only while the gate is provably absent (`15` §3).
 

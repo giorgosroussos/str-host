@@ -58,6 +58,11 @@ Affected specs: …
 - D-039 — Authorization policies and their tests — implementation
 - D-040 — Business dates in the property's timezone — implementation
 - D-041 — A test proves the database engine — implementation
+- D-042 — Test runner plugins and the test database — implementation
+- D-043 — Secret scan and dependency audit — implementation
+- D-044 — Local runtime, mail trap and the clean-start proof — implementation
+- D-045 — Health probe and closed framework endpoints — implementation
+- D-046 — Framework infrastructure tables keep their own keys — adr
 
 ## D-001 (2026-10-09) — Repository documentation regime
 Type: implementation
@@ -346,3 +351,39 @@ Decision: The suite includes one test that asserts the connection driver is `pgs
 Why: the constraint 'Pest tests on real PostgreSQL' is only enforced if a misconfigured run cannot pass silently.
 Alternatives: rely on the CI service definition (rejected: a local run on SQLite would still pass).
 Affected specs: `12` §1.
+
+## D-042 (2026-10-09) — Test runner plugins and the test database
+Type: implementation
+Decision: Pest 4 with pest-plugin-laravel 4 and pest-plugin-browser 4 (Playwright Chromium headless shell, installed by make setup). Suites tests/Unit, tests/Feature, tests/Isolation run in make test; tests/Browser runs in make test-browser after a production build, each visited page checked with assertNoAccessibilityIssues at every axe impact level. Tests run on the database str_host_test of the Compose PostgreSQL 16 server, forced in phpunit.xml together with DB_CONNECTION=pgsql; Feature and Isolation use RefreshDatabase and withoutVite so make test needs no build.
+Why: Pest 5 requires PHP 8.4 and the stack fixes 8.3 (`02` §2); one server with a separate database keeps tests off development data with nothing extra to start; forcing the connection makes a SQLite run impossible (`12` §1, D-041).
+Alternatives: Pest 5 (rejected: PHP 8.4); a second Compose service for tests (rejected: extra process for no isolation gain); Testcontainers (rejected: another dependency); axe at serious-and-above only (rejected: weaker than the WCAG target needs).
+Affected specs: `12` §1.
+
+## D-043 (2026-10-09) — Secret scan and dependency audit
+Type: implementation
+Decision: make scan-secrets runs gitleaks v8.30.1 from its container image pinned by digest over a copy of the working-tree version of every path git ls-files lists. make audit runs composer audit --locked and npm audit at the default level, so any advisory fails. ESLint is configured with typescript-eslint, eslint-plugin-vue and eslint-config-prettier rather than @vue/eslint-config-typescript.
+Why: Docker is already a prerequisite, the digest makes the scanner reproducible and the scope is the contract's 'everything Git tracks'; neither tool sends data to a third party (`02` §5); @vue/eslint-config-typescript pulls braces, which has an unfixed high advisory and would fail the audit gate.
+Alternatives: trufflehog (rejected: heavier, same coverage); a downloaded gitleaks binary (rejected: install and checksum handling); gitleaks git history scan (rejected: fails inside git worktrees, and history is fixed by then); audit only high and critical (rejected: weaker gate); Snyk or OSV services (rejected: third party).
+Affected specs: `12` §2.
+
+## D-044 (2026-10-09) — Local runtime, mail trap and the clean-start proof
+Type: implementation
+Decision: docker-compose.yml runs postgres:16-alpine on 127.0.0.1:${DB_PORT:-54316} under a Compose project named after the directory, together with the development mail trap Mailpit (axllent/mailpit v1.31.1, digest-pinned; SMTP on 127.0.0.1:${MAIL_PORT:-51025}, inbox and API on 127.0.0.1:${MAILPIT_UI_PORT:-58025}) that .env.example sends all development mail to; make smoke proves locally that a message sent by the application lands in it. Ports and credentials come from the shell, then .env. Node 22 is pinned in .nvmrc and package.json engines and checked by scripts/toolchain.sh. make dev runs artisan serve, the Vite dev server and schedule:work through concurrently. make clean-start clones the committed HEAD into a temporary directory and runs setup, infra-up, migrate, verify, dev and smoke under a unique Compose project on free ports, then removes the volumes and the clone.
+Why: Several clones or worktrees can run side by side; a clean-start that reuses the developer's database or ports would not prove a fresh clone (`15` §3). Development mail must go to a mail trap and never to real recipients (`11` §1); a local trap needs no account, credentials or third party.
+Alternatives: Fixed port 5432 (rejected: commonly taken); php artisan dev (rejected: less explicit process list); clean-start in place with down --volumes (rejected: destroys the developer's data and tests uncommitted state); the log mailer (rejected: not a mail trap); a hosted sandbox account such as Mailtrap.io (rejected: a third party receives development mail and credentials are needed; still configurable through the SMTP variables); MailHog (rejected: unmaintained).
+Affected specs: `11` §1, `15` §3.
+
+## D-045 (2026-10-09) — Health probe and closed framework endpoints
+Type: implementation
+Decision: The application's own GET /up (outside the web middleware group, JSON, checks PostgreSQL, 503 without error detail when down) replaces the framework health route. Fortify is installed with views off, no features and Fortify::ignoreRoutes until ACC-03. The local disk's storage/{path} serve route and Inertia DevTools recording are off. A test pins the route list.
+Why: The framework health page loads fonts.bunny.net and cdn.jsdelivr.net (`02` §5, D-018) and does not check the database; FND-01 exposes no endpoint beyond what make smoke needs; DevTools would write page props to disk (D-017).
+Alternatives: Framework /up (rejected: third-party assets); enable Fortify's default features now (rejected: ACC-03 owns logins and the second factor, `07` §1); framework defaults for serve and DevTools (rejected: unauthenticated endpoints, props on disk).
+Affected specs: `02` §4, `02` §5.
+
+## D-046 (2026-10-09) — Framework infrastructure tables keep their own keys
+Type: adr
+Decision: The UUID primary-key rule covers the product's tables. The framework's own infrastructure tables (migrations, the database-queue tables jobs, failed_jobs and job_batches, cache, sessions, password reset tokens) keep their stock keys; none of those keys is ever exposed in a URL. `03` §1 and the locked register bullet in `14` §1 state the exemption, tagged Q-098. The queue tables ship with their stock schema when the first package queues work.
+Why: Owner answer B to Q-098: Laravel's migrations table and database queue (D-025) depend on integer keys, and the rule's purpose, nothing guessable in a URL (`03` §1), is met because those keys never leave the server. Option A needed a custom queue driver or database-generated UUIDv4 keys against D-009.
+Alternatives: A) UUID keys on every table including framework tables (rejected by the owner: custom queue driver or database-generated UUIDv4 against D-009, patched migration repository, more code to maintain).
+Affected specs: `03` §1, `14` §1.
+Owner approval: granted 2026-10-09
