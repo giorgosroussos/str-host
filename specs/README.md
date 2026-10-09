@@ -1,7 +1,7 @@
 # STR Host — MVP Specifications
 
-Version: 0.1-draft  
-Status: Draft, not yet an implementation baseline  
+Version: 1.0  
+Status: Implementation baseline (2026-10-09)  
 Audience: Product owner, architects, developers, QA, DevOps and GenAI SWE agents
 
 ## Product statement
@@ -18,7 +18,7 @@ The customer is the account: a management company running 5–60 properties for 
 - Tenancy: `company_id` on every tenant table with a global scope. [input]
 - Local environment: Docker Compose for the database; development runs on localhost. [input, Q-035]
 - Interface languages: Greek and English. [input]
-- Primary keys: UUIDv7. [D-009]
+- Primary keys: UUIDv7. [Q-056, D-009]
 - Quality tooling: Larastan, Pint, vue-tsc, ESLint and Prettier. [D-006]
 - Statement PDFs: dompdf. [D-007]
 - Guest-page map: MapLibre GL JS over a self-hosted PMTiles file of Greece. [Q-049]

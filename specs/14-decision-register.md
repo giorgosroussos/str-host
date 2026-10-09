@@ -21,6 +21,7 @@ Each bullet below is an owner decision: stated in the requirements (`[input]`) o
 - Backups MUST be kept 30 days (`11` §5). [Q-052]
 - Archived owners' phone, email and IBAN and archived cleaners' phone MUST be erased 24 months after archiving (`10` §5). [Q-055]
 - A finalised statement's numbers MUST NOT change (`06` §8). [input]
+- Two reservations on a property MUST NOT overlap, a same-day check-out and check-in excepted, enforced by the database (`04` §4). [Q-061]
 
 ## 2. Security
 
@@ -29,7 +30,7 @@ Each bullet below is an owner decision: stated in the requirements (`[input]`) o
 - Guests and cleaners MUST NOT have accounts; they use signed links (`02` §4). [input]
 - There MUST be no web role that sees more than one account (`07` §6). [Q-012]
 - Admins MUST use a second factor; others MAY (`07` §4). [Q-013]
-- A guest link MUST work from creation until 23:59 Europe/Athens on the check-out day (`08` §2). [Q-014]
+- A guest link MUST work from creation until 23:59 on the check-out day in the property's timezone (`08` §2). [Q-090]
 - A cleaner link MUST stay valid until revoked or reissued (`08` §3). [Q-015]
 - An owner MUST see a guest's first name only (`07` §3). [Q-016]
 - An owner MUST see amounts only in finalised statements (`07` §3). [Q-017]
@@ -37,6 +38,9 @@ Each bullet below is an owner decision: stated in the requirements (`[input]`) o
 - A signed-up account MUST stay pending until the operator approves it (`01` §4). [Q-046]
 - Logins MUST be delivered by single-use invitations expiring after 7 days (`07` §1). [Q-050]
 - One login MUST NOT be both staff and owner (`07` §1). [Q-051]
+- Guest and cleaner links MUST authorise each request by their token alone, with no session (`02` §4). [Q-066]
+- Staff and owners MUST be able to reset a forgotten password by email (`09` §7). [Q-067]
+- Link tokens MUST be stored only as hashes and be revocable one by one (`10` §2). [Q-072]
 
 ## 3. Scope
 
@@ -73,6 +77,9 @@ Each bullet below is an owner decision: stated in the requirements (`[input]`) o
 - The map MUST be a self-hosted PMTiles file of Greece (`02` §5). [Q-049]
 - Commission on the cleaning fee MUST follow whoever keeps the fee (`06` §3). [Q-053]
 - A fixed-per-reservation fee MUST apply to a cancellation only when it keeps income (`06` §3). [Q-054]
+- Expenses MUST be either charged to the owner or absorbed by the account; only charged ones reduce the payout (`06` §6). [Q-080]
+- A reservation MUST count in the month of its check-out date in the property's timezone (`06` §4). [Q-082]
+- A statement MUST NOT be finalised while a counting reservation lacks money lines (`06` §9). [Q-083]
 
 ## 5. Product identity and UX
 
@@ -92,4 +99,4 @@ These decisions are implementation constraints. A proposed change requires:
 3. migration and testing implications;
 4. Product Owner approval before code changes.
 
-The ADR is a `DECISIONS.md` entry of type `adr` carrying `Owner approval: pending` until the owner grants or rejects it. Agents MUST NOT reopen decisions merely because a different framework or pattern is familiar. Small implementation details may be decided locally if they preserve the locked behavior and are recorded in `DECISIONS.md`. [D-002]
+The ADR is a `DECISIONS.md` entry of type `adr` carrying `Owner approval: pending` until the owner grants or rejects it. Agents MUST NOT reopen decisions merely because a different framework or pattern is familiar. Small implementation details may be decided locally if they preserve the locked behavior and are recorded in `DECISIONS.md`. [Q-079, D-002]

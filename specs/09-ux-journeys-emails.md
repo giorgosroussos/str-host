@@ -6,16 +6,16 @@ How people move through the product, what it looks like to whom, and every email
 
 - The staff app MUST be organised in sections by activity, each listing across all properties: Timeline (home), Dashboard, Reservations, Turnovers, Properties, Owners, Expenses, Statements, Settings. [Q-040, Q-024]
 - The Timeline MUST show every property's reservations and owner stays side by side and MUST be the first screen after login. [input, Q-040]
-- Operations staff MUST NOT see the Dashboard, Expenses or Statements sections or any amount in the others (`07` §2). [input]
+- Operations staff MUST NOT see the Dashboard, Expenses or Statements sections or any amount in the others (`07` §2). [input, Q-024]
 
 ## 2. Dashboard
 
 - Admins MUST see, per property per month, occupancy and net rental income. [Q-024]
-- Occupancy MUST be nights of confirmed non-owner-stay reservations falling in the month divided by nights in the month, and income MUST follow the check-out month rule of `06` §4. [D-022]
+- Occupancy MUST be nights of confirmed non-owner-stay reservations falling in the month divided by nights in the month, and income MUST follow the check-out month rule of `06` §4. [Q-084, D-022]
 
 ## 3. Staff journeys
 
-These journeys MUST each work end to end and are the browser tests of `12` §6: [input]
+These journeys MUST each work end to end and are the browser tests of `12` §6: [input, Q-019, Q-046, Q-022, Q-050, D-036]
 
 1. **Get an account:** sign up, verify the email, wait for approval, log in as admin (`01` §4).
 2. **Onboard:** add owners and invite them, add properties with their terms, add cleaners and send their links.
@@ -35,23 +35,25 @@ These journeys MUST each work end to end and are the browser tests of `12` §6: 
 
 ## 6. Languages
 
-- Every screen, email and PDF MUST exist in Greek and English. [input]
+- Every screen, email and PDF MUST exist in Greek and English. [input, Q-021, D-024]
 - Staff and owners MUST choose their language; the guest page follows the reservation's language and the cleaner link the cleaner's. [input]
 - A missing interface string MUST fall back to English, and a test MUST fail when the two language files differ in keys. [D-024]
 
 ## 7. Emails
 
-The product MUST send exactly these emails, in the recipient's language and from the product's sending domain: [input, Q-036]
+The product MUST send exactly these emails, from the product's sending domain, each in its recipient's chosen language: [Q-036, D-024]
 
 | Email | To | Trigger | Provenance |
 | --- | --- | --- | --- |
 | Verify email | person signing up | sign-up | Q-019 |
-| Account active | first admin | operator approval | D-035 |
+| Account active | first admin | operator approval | Q-089 |
 | Invitation | new staff or owner | admin invites | Q-050 |
-| Password reset | staff or owner | reset request | input |
+| Password reset | staff or owner | reset request | Q-067 |
 | Statement finalised | owner | admin finalises | Q-021 |
 
 - The statement email MUST carry a link to the portal and no amount. [Q-021]
+- Approving an account MUST send its first admin an account-active email with a login link. [Q-089, D-035]
+- Staff and owners MUST be able to reset a forgotten password through an emailed single-use, time-limited link. [Q-067]
 - The product MUST NOT send any email to guests or cleaners. [input]
 
 ## 8. Devices

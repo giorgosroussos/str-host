@@ -4,7 +4,7 @@ The calculation that decides every payout, and the statement that carries it. Al
 
 ## 1. Units and rounding
 
-- Every amount MUST be integer euro cents and every percentage integer basis points; no float or decimal type appears on a money path. [input, D-012]
+- Every amount MUST be integer euro cents and every percentage integer basis points; no float or decimal type appears on a money path. [input, Q-057]
 - Every computed amount MUST be rounded half up to the cent on its own line, and every total MUST equal the sum of its rounded lines. [Q-032]
 
 ## 2. Property terms
@@ -15,7 +15,7 @@ The calculation that decides every payout, and the statement that carries it. Al
 
 ## 3. Owner share per reservation
 
-For a reservation that counts in a month: [input]
+For a reservation that counts in a month: [input, Q-028, Q-030, Q-031, Q-053]
 
 ```
 gross
@@ -40,22 +40,23 @@ gross
 
 ## 4. Which month
 
-- A reservation MUST count, whole, in the month of its check-out date, in Europe/Athens; a cancelled one with money in the month of its original check-out. [input, D-011, Q-005]
+- A reservation MUST count, whole, in the month of its check-out date in the property's timezone; a cancelled one with money in the month of its original check-out. [input, Q-082, Q-005]
+- Every other date tied to a property MUST be read in the property's timezone, and dates not tied to a property in Europe/Athens. [Q-096, D-040]
 - An expense MUST count in the month of its date. [Q-045]
 - A fixed monthly fee MUST be charged per property per month, even with no reservations, dated the last day of the month. [input, Q-045]
 - Every dated item MUST belong to the owner who held the property on its date (`03` §3). [Q-004, Q-045]
 
 ## 5. Climate resilience fee rates
 
-- Rates MUST be one installation-wide table by property type and season, maintained by the operator (`11` §4), with dated validity so past reservations keep their rates. [Q-033, D-023]
+- Rates MUST be one installation-wide table by property type and season, maintained by the operator (`11` §4), with dated validity so past reservations keep their rates. [Q-033, Q-062]
 
 ## 6. Expenses
 
-- An expense MUST be either charged to the owner or absorbed by the account, and MAY carry receipt files the owner sees on the finalised statement. [input, Q-022]
+- An expense MUST be either charged to the owner or absorbed by the account, and MAY carry receipt files the owner sees on the finalised statement. [Q-080, Q-022]
 
 ## 7. Payout and negative months
 
-- Payout MUST equal the sum of owner shares, minus owner-charged expenses, minus fixed monthly fees with their VAT, plus or minus adjustments landing in the month. [input]
+- Payout MUST equal the sum of owner shares, minus owner-charged expenses, minus fixed monthly fees with their VAT, plus or minus adjustments landing in the month. [input, Q-031, Q-045]
 - When that sum is negative, the payout MUST be zero and the negative amount MUST become an adjustment on the owner's next month. [Q-027]
 
 ## 8. Adjustments
@@ -73,9 +74,9 @@ stateDiagram-v2
 ```
 
 - There MUST be one statement per owner per month covering all their properties, drafted, reviewed, finalised and marked paid by an admin. [input]
-- A draft MUST be computed from current records whenever it is opened; only finalisation stores lines. [D-031]
-- A draft MUST NOT be finalised while a counting reservation has no money lines. [D-028]
+- A draft MUST be computed from current records whenever it is opened; only finalisation stores lines. [Q-063, D-031]
+- A draft MUST NOT be finalised while a counting reservation has no money lines. [Q-083, D-028]
 - Finalising MUST freeze a snapshot of every line and total, produce the PDF and email the owner a link (`09` §7). [input, Q-021, D-007]
-- A finalised statement MUST NOT return to draft. [input]
-- Recording the payout MUST store the date paid; the product MUST NOT move money. [input]
+- A finalised statement MUST NOT return to draft. [Q-093]
+- Recording the payout MUST store the date paid; the product MUST NOT move money. [input, Q-091]
 - For self-owned properties the account MUST get a monthly view of income, deductions, expenses and net, with no management fee and no statement. [input]

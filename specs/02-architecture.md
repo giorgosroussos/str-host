@@ -28,7 +28,8 @@ How the system is built: layout, stack, the tenant boundary and the components.
 ## 3. Tenant boundary
 
 - Every tenant table MUST carry `company_id`, and every query on it MUST pass through a global scope that filters by the current account. [input]
-- The current account MUST be derived on the server: from the authenticated login for staff and owners, from the signed link for guests and cleaners. A `company_id` sent by the client MUST be ignored. [input]
+- The current account MUST be derived on the server, never from a value the client sends. [input]
+- Staff and owners MUST get it from their login, guests and cleaners from their link. [Q-094, D-038]
 - Inside an account, every owner-portal query MUST additionally be scoped to the logged-in owner's properties. [input]
 - Installation-wide tables (accounts, climate resilience fee rates, terms versions) carry no `company_id` and MUST NOT hold any account's data. [Q-033, Q-047]
 
@@ -41,7 +42,7 @@ How the system is built: layout, stack, the tenant boundary and the components.
 | Guest page | token in the link | `/g/{token}` |
 | Cleaner link | token in the link | `/c/{token}` |
 
-- Guests and cleaners MUST NOT receive a session or an account; each request is authorised by its link token alone. [input]
+- Guests and cleaners MUST NOT receive a session or an account; each request is authorised by its link token alone. [Q-066]
 - A staff login MUST NOT open owner-portal routes and an owner login MUST NOT open staff routes. [Q-051]
 
 ## 5. Third parties
@@ -49,7 +50,7 @@ How the system is built: layout, stack, the tenant boundary and the components.
 - The only third party receiving data in production MUST be the transactional email provider (`11` §3). [Q-036]
 - Errors MUST be logged on the server only; no error-tracking service is used. [Q-038]
 - The guest-page map MUST be served from the product's own server as a PMTiles file and rendered with MapLibre GL JS. [Q-049, D-008]
-- No page MAY load fonts, scripts, styles or tiles from a third-party host at runtime. [D-018]
+- No page MAY load fonts, scripts, styles or tiles from a third-party host at runtime. [Q-068, D-018]
 
 ## 6. Background work
 

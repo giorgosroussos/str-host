@@ -4,7 +4,7 @@ Who logs in, how, and what each role may do. Links for guests and cleaners are i
 
 ## 1. Logins
 
-- Staff and owners MUST log in with email and password through Fortify sessions. [input]
+- Staff and owners MUST log in with email and password through Fortify sessions. [input, Q-050]
 - A login MUST belong to exactly one account; a person working with two accounts uses two email addresses. [Q-001]
 - An owner MUST have exactly one login, and the owner portal MUST be read-only. [Q-002, input]
 - Staff and owner logins MUST be created by an admin of the account and delivered as an invitation email with a single-use link that sets the password and expires after 7 days. [Q-050]
@@ -12,9 +12,10 @@ Who logs in, how, and what each role may do. Links for guests and cleaners are i
 
 ## 2. Staff roles
 
-- Staff MUST have exactly one of two fixed roles, admin or operations; roles are not configurable. [input]
+- Staff MUST have exactly one of two roles, admin or operations. [input]
+- The roles and their permissions MUST be the same for every account and MUST NOT be configurable. [Q-095]
 - Admin MUST be able to do everything within the account. [input]
-- Operations MUST be able to manage properties, reservations, turnovers and cleaners, and MUST NOT see amounts, commercial terms, expenses, statements, the dashboard or the cleaner pay summary. [input]
+- Operations MUST be able to manage properties, reservations, turnovers and cleaners, and MUST NOT see amounts, commercial terms, expenses, statements, the dashboard or the cleaner pay summary. [input, Q-023, Q-024]
 - Operations MUST see only an owner's name and phone, never the IBAN, email or the owner list. [Q-018]
 
 The permission matrix (✓ = full, R = read, — = none):
@@ -34,7 +35,7 @@ The permission matrix (✓ = full, R = read, — = none):
 | Statements, adjustments, payouts | ✓ | — | own finalised, R |
 | Dashboard, audit trail | ✓ | — | — |
 
-- Every action MUST be authorised by a policy that encodes this matrix, and the isolation suite MUST test each cell (`12` §3). [input]
+- Every action MUST be authorised by a policy that encodes this matrix, and the isolation suite MUST test each cell (`12` §3). [input, D-039]
 
 ## 3. Owners
 

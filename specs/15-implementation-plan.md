@@ -52,7 +52,7 @@ Goal: a reproducible repository, one command that runs every gate, CI that runs 
 - Shared tokens and base components, focus and error patterns, responsive shell for the four entry surfaces of `02` §4, branded per `09` §5.
 - Localization skeleton with the fallback rule of `09` §6; no hard-coded UI strings.
 - Automated accessibility smoke test wired as a real gate, replacing its tripwire (`09` §9, `12` §1).
-- Surfaces: security, ux
+- Surfaces: security, scope, ux
 - Touches red line: yes
 - Contract change: no
 
@@ -69,7 +69,7 @@ Goal: an account can exist, its people can log in with the right role, and nothi
 `ACC-01` Tenancy and isolation harness
 
 - `company_id` and the global scope of `02` §3 on a first tenant model; the isolation suite of `12` §3 as a reusable harness every later package extends.
-- Surfaces: external
+- Surfaces: security, external
 - Touches red line: yes
 - Contract change: yes
 
@@ -114,7 +114,7 @@ Goal: an account holds its owners, properties, terms and cleaners.
 `PRP-02` Property terms
 
 - Fee model, cleaning-fee keeper, turnover-cost payer and the account VAT rate (`06` §2), admin only (`07` §2).
-- Surfaces: security, external
+- Surfaces: security, scope, external
 - Touches red line: yes
 - Contract change: yes
 
@@ -145,7 +145,7 @@ Goal: a month of reservations can be entered and its turnovers run.
 `RES-02` Money lines and climate fee rates
 
 - Money lines, the installation rate table and its operator command, and climate fee prefill (`04` §5, `06` §5).
-- Surfaces: external
+- Surfaces: data, external
 - Touches red line: no
 - Contract change: yes
 
@@ -159,7 +159,7 @@ Goal: a month of reservations can be entered and its turnovers run.
 `RES-04` Turnovers
 
 - Turnovers at check-out, assignment, completion by staff, cost and following the reservation (`05` §1–§2).
-- Surfaces: ux
+- Surfaces: data, security, external, ux
 - Touches red line: no
 - Contract change: yes
 
@@ -190,7 +190,7 @@ Goal: each owner's month closes with a statement that matches a hand calculation
 `MON-03` Statement lifecycle
 
 - Drafts, finalisation snapshot, payout recording, the self-owned monthly view (`06` §9).
-- Surfaces: scope
+- Surfaces: data, scope, external
 - Touches red line: yes
 - Contract change: yes
 
@@ -204,14 +204,14 @@ Goal: each owner's month closes with a statement that matches a hand calculation
 `MON-05` Statement PDF and email
 
 - The PDF in both languages and the finalisation email (`06` §9, `09` §7).
-- Surfaces: scope, external
+- Surfaces: data, security, scope, external, ux
 - Touches red line: yes
 - Contract change: no
 
 `MON-06` Dashboard and cleaner pay summary
 
 - The admin dashboard (`09` §2) and the cleaner pay summary (`05` §4).
-- Surfaces: scope
+- Surfaces: scope, external
 - Touches red line: no
 - Contract change: no
 
@@ -235,7 +235,7 @@ Goal: owners, guests and cleaners see exactly their narrow view.
 `OUT-02` Guest page and map
 
 - The guest page of `08` §2 with the self-hosted map (`02` §5, `11` §7).
-- Surfaces: security, external, ux
+- Surfaces: data, security, external, ux
 - Touches red line: yes
 - Contract change: no
 
@@ -273,14 +273,14 @@ Goal: the product can run in production for external accounts.
 `OPS-03` Production deployment and backups
 
 - The production setup of `11` §2–§3, backups and a rehearsed restore (`11` §5).
-- Surfaces: data, external
+- Surfaces: data, security, scope, external
 - Touches red line: yes
 - Contract change: no
 
 `OPS-04` Release acceptance
 
 - Every journey of `12` §6 and the release gate of `12` §7.
-- Surfaces: —
+- Surfaces: scope
 - Touches red line: no
 - Contract change: no
 

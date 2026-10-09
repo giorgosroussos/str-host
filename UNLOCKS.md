@@ -13,3 +13,4 @@ Format, machine-read by `scripts/lock-guard.py`:
 Never edit or remove a line here. The point of the file is that it cannot be tidied.
 
 ## Records
+- unlock 2026-10-09T13:56:33Z path=".doc-locks" by="Giorgos Roussos" reason="freeze 1.0: promote specs/** to hard-locked"

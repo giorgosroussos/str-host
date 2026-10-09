@@ -27,7 +27,7 @@ Affected specs: …
 - D-008 — Map rendering library — implementation
 - D-009 — UUID version — implementation
 - D-010 — Stay interval and overlap — implementation
-- D-011 — Business timezone — implementation
+- D-011 — Business timezone — implementation — superseded by D-040
 - D-012 — Money representation — implementation
 - D-013 — Signed link tokens — implementation
 - D-014 — Turnover cost source — implementation
@@ -54,6 +54,10 @@ Affected specs: …
 - D-035 — Account-approved email — implementation
 - D-036 — Test layers — implementation
 - D-037 — Packages that change a contract — implementation
+- D-038 — Record-keeping details from the input audit — implementation
+- D-039 — Authorization policies and their tests — implementation
+- D-040 — Business dates in the property's timezone — implementation
+- D-041 — A test proves the database engine — implementation
 
 ## D-001 (2026-10-09) — Repository documentation regime
 Type: implementation
@@ -126,6 +130,7 @@ Alternatives: closed intervals (rejected: forbids same-day turnover); validation
 Affected specs: `04`.
 
 ## D-011 (2026-10-09) — Business timezone
+Status: superseded by D-040
 Type: implementation
 Decision: Every business date (check-in, check-out, turnover day, statement month, link expiry, retention deadline) is a calendar date in Europe/Athens. Timestamps are stored in UTC.
 Why: all properties are in Greece; a UTC day would move late-evening events into the wrong day or month.
@@ -313,3 +318,31 @@ Decision: `Contract change: yes` for the packages that create or alter the datab
 Why: the product has no public API, so its contracts are the schema and the Inertia page props; a package that migrates tables is the one whose change ripples into others.
 Alternatives: mark every package `yes` (rejected: the flag would select nothing); mark only FND-01 (rejected: hides the schema work of every domain phase); count MON-01 as a contract (rejected: a pure module with no schema).
 Affected specs: `15` §3–§9.
+
+## D-038 (2026-10-09) — Record-keeping details from the input audit
+Type: implementation
+Decision: The server derives the current account from the login for staff and owners and from the link for guests and cleaners. Recording a payout stores the date it was paid.
+Why: the input audit found these stated as owner input; each has one plausible form once the input's rule is accepted (tenant context derived on the server; a payout recorded as paid), so they are recorded here instead.
+Alternatives: leave them tagged as input (rejected: the inputs do not say them); store only a paid flag (rejected: a payout without a date cannot be reconciled with a bank statement).
+Affected specs: `02` §3, `06` §9.
+
+## D-039 (2026-10-09) — Authorization policies and their tests
+Type: implementation
+Decision: Every action is authorised by a Laravel policy that encodes the permission matrix of `07` §2, and the isolation suite tests the allowed and the refused case of each cell. A failing isolation test fails `make test`, which blocks merging.
+Why: the base plan requires isolation tests on every model and action, always green; one policy per matrix makes each cell testable in one place.
+Alternatives: inline checks in controllers (rejected: untestable as a matrix); test only refused cases (rejected: a policy that refuses everything would pass).
+Affected specs: `07` §2, `12` §3.
+
+## D-040 (2026-10-09) — Business dates in the property's timezone
+Type: implementation
+Decision: Each property carries an IANA timezone, chosen by staff when the property is set up and defaulting to Europe/Athens. Every date tied to a property (check-in, check-out, turnover day, the statement month a reservation counts in, the cleaner link's 'today') is a calendar date in that property's timezone. Dates not tied to a property (retention and deletion deadlines, the fixed monthly fee's last day of the month) use Europe/Athens. Timestamps are stored in UTC.
+Why: the owner answered Q-082 that the property's timezone decides the statement month; applying the same rule to every property-bound date keeps a stay, its turnover and its month in one calendar.
+Alternatives: property timezone for the statement month only (rejected: a turnover could fall on a different day than its check-out); keep Europe/Athens everywhere (rejected by Q-082).
+Affected specs: `03` §2, `06` §4.
+
+## D-041 (2026-10-09) — A test proves the database engine
+Type: implementation
+Decision: The suite includes one test that asserts the connection driver is `pgsql` and the server version is 16, so a run against SQLite or another engine fails instead of passing.
+Why: the constraint 'Pest tests on real PostgreSQL' is only enforced if a misconfigured run cannot pass silently.
+Alternatives: rely on the CI service definition (rejected: a local run on SQLite would still pass).
+Affected specs: `12` §1.

@@ -11,14 +11,14 @@ The boundaries that must never break, and how long personal data lives.
 
 ## 2. Signed links
 
-- Guest and cleaner links MUST carry a 256-bit random token of which only a SHA-256 hash is stored; revoking deletes the hash, reissuing creates a new token. [D-013]
-- A guest link MUST expire at 23:59 Europe/Athens on the check-out day (`08` §2). [Q-014]
+- Guest and cleaner links MUST carry a 256-bit random token of which only a SHA-256 hash is stored; revoking deletes the hash, reissuing creates a new token. [Q-072, D-013]
+- A guest link MUST expire at 23:59 on the check-out day in the property's timezone (`08` §2). [Q-090]
 - A cleaner link MUST stay valid until revoked or reissued (`08` §3). [Q-015]
 - Links MUST NOT leak money, owners, other reservations, or guest data beyond the first name. [input]
 
 ## 3. Logging
 
-- Logs, exception reports and audit views MUST NOT contain IBANs, link tokens, passwords, second-factor secrets, or guest surnames, phones or emails. [D-017]
+- Logs, exception reports and audit views MUST NOT contain IBANs, link tokens, passwords, second-factor secrets, or guest surnames, phones or emails. [Q-073, D-017]
 
 ## 4. Audit trail
 
@@ -30,7 +30,7 @@ The boundaries that must never break, and how long personal data lives.
 - Phone, email and IBAN of an archived owner, and the phone of an archived cleaner, MUST be erased 24 months after archiving; names stay on finalised statements. [Q-055]
 - Receipt files MUST be kept as long as their expense. [Q-048]
 - Backups MUST be kept 30 days, so removed personal data leaves every copy within 30 days (`11` §5). [Q-052]
-- Anonymisation and erasure MUST run daily from the scheduler. [D-025]
+- Anonymisation and erasure MUST run daily from the scheduler. [Q-065, D-025]
 
 ## 6. An account leaving
 
@@ -48,5 +48,5 @@ The boundaries that must never break, and how long personal data lives.
 ## 9. Authentication hardening
 
 - Admin logins MUST require a second factor (`07` §4). [Q-013]
-- Login, reset, invitation and sign-up forms MUST be rate limited and MUST NOT reveal whether an email has a login. [D-033]
+- Login, reset, invitation and sign-up forms MUST be rate limited and MUST NOT reveal whether an email has a login. [Q-074, D-033]
 - Invitations MUST be single-use and expire after 7 days. [Q-050]

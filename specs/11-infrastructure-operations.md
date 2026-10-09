@@ -10,8 +10,8 @@ Where the product runs, what it depends on, and what the operator does from the 
 ## 2. Production hosting
 
 - Production MUST run on a VPS of an EU-based provider in an EU region, paid by the operator. [Q-035]
-- Production MUST run with Docker Compose on that host: application, queue worker, scheduler and PostgreSQL, behind a TLS-terminating proxy with automatically renewed certificates. [D-034]
-- Every request MUST be served over HTTPS. [D-034]
+- Production MUST run with Docker Compose on that host: application, queue worker, scheduler and PostgreSQL, behind a TLS-terminating proxy with automatically renewed certificates. [Q-085, D-034]
+- Every production request MUST be served over HTTPS; local development MAY use plain HTTP (§1). [Q-075, D-034]
 
 ## 3. Email
 
@@ -20,11 +20,11 @@ Where the product runs, what it depends on, and what the operator does from the 
 
 ## 4. Operator commands
 
-The operator MUST be able to do the following with Artisan commands on the server, each logged with command, arguments and time: [Q-012, D-023]
+The operator MUST be able to do the following with Artisan commands on the server, each logged with command, arguments and time: [Q-012, Q-076]
 
 | Command | Does | Provenance |
 | --- | --- | --- |
-| approve an account | pending → active, sends the account-active email | Q-046, D-035 |
+| approve an account | pending → active, sends the account-active email | Q-046, Q-089 |
 | suspend an account | active → suspended, logins and links stop | Q-011 |
 | export an account | writes the account's data to a file for the account | Q-011 |
 | delete an account | removes all data of a suspended account; runs automatically 90 days after suspension | Q-011 |
@@ -36,8 +36,8 @@ The operator MUST be able to do the following with Artisan commands on the serve
 
 ## 5. Backups
 
-- PostgreSQL MUST be dumped nightly together with receipt files to storage of the same provider in an EU region, kept 30 days. [Q-052, D-019]
-- A restore MUST be rehearsed before the first external account goes live. [D-019]
+- PostgreSQL MUST be dumped nightly together with receipt files to storage of the same provider in an EU region, kept 30 days. [Q-052, Q-086]
+- A restore MUST be rehearsed before the first external account goes live. [Q-077, D-019]
 
 ## 6. Errors and logs
 
